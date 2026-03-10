@@ -1,0 +1,23 @@
+{
+  "shop_name": "MODO",
+  "slogan": "Dein Style, deine Wahl",
+  "contact_email": "info@modo-shop.ch",
+  "contact_phone": "+41 44 123 45 67",
+  "contact_address": "Bahnhofstrasse 42, 8001 Zürich",
+  "country": "CH",
+  "currency": "CHF",
+  "primary_color": "#1a1a2e",
+  "secondary_color": "#e94560",
+  "font_family": "Inter",
+  "font_size_base": "16",
+  "font_size_heading": "28",
+  "logo_url": "",
+  "shipping_cost": 7.90,
+  "free_shipping_threshold": 75.00,
+  "vat_rate": 8.1,
+  "payment_methods": {
+    "twint": true,
+    "credit_card": true,
+    "invoice": true
+  }
+}

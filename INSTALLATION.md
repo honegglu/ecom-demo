@@ -96,6 +96,49 @@ chmod 755 assets/images/
 
 ---
 
+## Option B: Mit Docker starten (empfohlen)
+
+Falls du kein PHP installieren möchtest – Docker reicht völlig.
+
+**Voraussetzung:** [Docker Desktop](https://www.docker.com/products/docker-desktop/) installieren (macOS, Windows oder Linux).
+
+### 1. Repository klonen
+
+```bash
+git clone https://github.com/honegglu/ecom-demo.git
+cd ecom-demo
+```
+
+### 2. Container starten
+
+```bash
+docker compose up -d
+```
+
+### 3. Im Browser öffnen
+
+```
+http://localhost:8000
+```
+
+Der Container läuft mit Apache + PHP 8.3, `mod_rewrite` ist aktiviert – saubere URLs (`/cart`, `/settings`, `/product/...`) funktionieren direkt.
+
+### Container stoppen
+
+```bash
+docker compose down
+```
+
+### Logs anschauen
+
+```bash
+docker compose logs -f
+```
+
+> **Hinweis:** Deine lokalen Dateien werden direkt in den Container gemountet. Änderungen an Code oder Daten sind sofort sichtbar – kein Neustart nötig.
+
+---
+
 ## Deployment auf einem Server (optional)
 
 Für den Einsatz auf einem echten Webserver (z.B. für Usability-Tests mit Teilnehmern):

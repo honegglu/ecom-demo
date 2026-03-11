@@ -172,59 +172,7 @@ $paymentMethods = $settings['payment_methods'] ?? ['twint' => true, 'credit_card
                 <div class="twint-container">
                     <p>Scanne den QR-Code mit deiner TWINT-App:</p>
                     <div class="twint-qr" id="twintQr">
-                        <!-- Generated QR placeholder -->
-                        <svg viewBox="0 0 200 200" width="200" height="200">
-                            <rect width="200" height="200" fill="white"/>
-                            <g fill="black">
-                                <!-- QR-like pattern -->
-                                <rect x="10" y="10" width="50" height="50"/>
-                                <rect x="140" y="10" width="50" height="50"/>
-                                <rect x="10" y="140" width="50" height="50"/>
-                                <rect x="20" y="20" width="30" height="30" fill="white"/>
-                                <rect x="150" y="20" width="30" height="30" fill="white"/>
-                                <rect x="20" y="150" width="30" height="30" fill="white"/>
-                                <rect x="27" y="27" width="16" height="16"/>
-                                <rect x="157" y="27" width="16" height="16"/>
-                                <rect x="27" y="157" width="16" height="16"/>
-                                <!-- Data pattern -->
-                                <rect x="70" y="10" width="10" height="10"/>
-                                <rect x="90" y="10" width="10" height="10"/>
-                                <rect x="110" y="10" width="10" height="10"/>
-                                <rect x="70" y="30" width="10" height="10"/>
-                                <rect x="100" y="30" width="10" height="10"/>
-                                <rect x="120" y="30" width="10" height="10"/>
-                                <rect x="80" y="50" width="10" height="10"/>
-                                <rect x="110" y="50" width="10" height="10"/>
-                                <rect x="10" y="70" width="10" height="10"/>
-                                <rect x="30" y="70" width="10" height="10"/>
-                                <rect x="50" y="70" width="10" height="10"/>
-                                <rect x="70" y="70" width="10" height="10"/>
-                                <rect x="90" y="70" width="10" height="10"/>
-                                <rect x="110" y="70" width="10" height="10"/>
-                                <rect x="130" y="70" width="10" height="10"/>
-                                <rect x="150" y="70" width="10" height="10"/>
-                                <rect x="170" y="70" width="10" height="10"/>
-                                <rect x="20" y="90" width="10" height="10"/>
-                                <rect x="50" y="90" width="10" height="10"/>
-                                <rect x="80" y="90" width="10" height="10"/>
-                                <rect x="100" y="90" width="10" height="10"/>
-                                <rect x="130" y="90" width="10" height="10"/>
-                                <rect x="160" y="90" width="10" height="10"/>
-                                <rect x="70" y="110" width="10" height="10"/>
-                                <rect x="90" y="110" width="10" height="10"/>
-                                <rect x="120" y="110" width="10" height="10"/>
-                                <rect x="70" y="130" width="10" height="10"/>
-                                <rect x="100" y="130" width="10" height="10"/>
-                                <rect x="140" y="130" width="10" height="10"/>
-                                <rect x="160" y="130" width="10" height="10"/>
-                                <rect x="180" y="130" width="10" height="10"/>
-                                <rect x="140" y="150" width="10" height="10"/>
-                                <rect x="170" y="150" width="10" height="10"/>
-                                <rect x="140" y="170" width="10" height="10"/>
-                                <rect x="160" y="170" width="10" height="10"/>
-                                <rect x="180" y="170" width="10" height="10"/>
-                            </g>
-                        </svg>
+                        <img src="/assets/images/twint-qr.png" alt="TWINT QR-Code" width="200" height="200" style="image-rendering: pixelated;">
                     </div>
                     <div class="twint-waiting" id="twintWaiting" style="display:none">
                         <div class="spinner"></div>

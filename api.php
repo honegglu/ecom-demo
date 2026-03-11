@@ -125,6 +125,100 @@ switch ($action) {
         }
         break;
 
+    // --- Upload product image ---
+    case 'upload_product_image':
+        if (isset($_FILES['image']) && isset($_POST['product_id'])) {
+            $allowed = ['image/png', 'image/jpeg', 'image/webp', 'image/gif'];
+            $fileType = $_FILES['image']['type'];
+            if (in_array($fileType, $allowed)) {
+                $productId = (int)$_POST['product_id'];
+                $filename = 'product_' . $productId . '_' . time() . '.jpg';
+                $dest = __DIR__ . '/assets/images/' . $filename;
+                $tmpPath = $_FILES['image']['tmp_name'];
+
+                // Server-side optimization with GD
+                $saved = false;
+                if (function_exists('imagecreatefromstring')) {
+                    $imgData = file_get_contents($tmpPath);
+                    $src = @imagecreatefromstring($imgData);
+                    if ($src) {
+                        $w = imagesx($src);
+                        $h = imagesy($src);
+                        // Max width 1200px for web
+                        $maxW = 1200;
+                        if ($w > $maxW) {
+                            $newH = (int)round($h * ($maxW / $w));
+                            $resized = imagecreatetruecolor($maxW, $newH);
+                            imagecopyresampled($resized, $src, 0, 0, 0, 0, $maxW, $newH, $w, $h);
+                            imagedestroy($src);
+                            $src = $resized;
+                        }
+                        // Save as JPEG with 82% quality (good balance)
+                        $saved = imagejpeg($src, $dest, 82);
+                        imagedestroy($src);
+                    }
+                }
+                // Fallback: just move the file if GD failed
+                if (!$saved) {
+                    $saved = move_uploaded_file($tmpPath, $dest);
+                }
+
+                if ($saved) {
+                    $imageUrl = '/assets/images/' . $filename;
+                    $products = get_products();
+                    foreach ($products as &$p) {
+                        if ($p['id'] === $productId) {
+                            if (!isset($p['images']) || !is_array($p['images'])) {
+                                $p['images'] = [];
+                            }
+                            $p['images'][] = $imageUrl;
+                            break;
+                        }
+                    }
+                    unset($p);
+                    save_products($products);
+                    echo json_encode(['success' => true, 'url' => $imageUrl]);
+                } else {
+                    echo json_encode(['success' => false, 'error' => 'Upload fehlgeschlagen']);
+                }
+            } else {
+                echo json_encode(['success' => false, 'error' => 'Ungültiger Dateityp']);
+            }
+        } else {
+            echo json_encode(['success' => false, 'error' => 'Keine Datei oder Produkt-ID']);
+        }
+        break;
+
+    // --- Delete product image ---
+    case 'delete_product_image':
+        $input = json_decode(file_get_contents('php://input'), true);
+        if ($input && isset($input['product_id']) && isset($input['image_url'])) {
+            $products = get_products();
+            $found = false;
+            foreach ($products as &$p) {
+                if ($p['id'] === (int)$input['product_id']) {
+                    $p['images'] = array_values(array_filter($p['images'], fn($img) => $img !== $input['image_url']));
+                    $found = true;
+                    break;
+                }
+            }
+            unset($p);
+            if ($found) {
+                save_products($products);
+                // Delete file if it's a local upload
+                $localPath = __DIR__ . $input['image_url'];
+                if (str_starts_with($input['image_url'], '/assets/images/') && file_exists($localPath)) {
+                    unlink($localPath);
+                }
+                echo json_encode(['success' => true]);
+            } else {
+                echo json_encode(['success' => false, 'error' => 'Produkt nicht gefunden']);
+            }
+        } else {
+            echo json_encode(['success' => false, 'error' => 'Ungültige Eingabe']);
+        }
+        break;
+
     // --- Place order (simulated) ---
     case 'place_order':
         $input = json_decode(file_get_contents('php://input'), true);

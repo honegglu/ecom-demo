@@ -125,7 +125,7 @@ $products = get_products();
                 <table class="products-table">
                     <thead>
                         <tr>
-                            <th>Bild</th>
+                            <th>Bilder</th>
                             <th>Name</th>
                             <th>Kategorie</th>
                             <th>Preis</th>
@@ -137,7 +137,20 @@ $products = get_products();
                     <tbody>
                         <?php foreach ($products as $p): ?>
                         <tr data-product-id="<?= $p['id'] ?>">
-                            <td><img src="<?= htmlspecialchars($p['images'][0] ?? '') ?>" alt="" class="table-thumb"></td>
+                            <td>
+                                <div class="product-images-cell">
+                                    <div class="product-thumbs" id="thumbs-<?= $p['id'] ?>">
+                                        <?php foreach (($p['images'] ?? []) as $img): ?>
+                                        <div class="product-thumb-wrap">
+                                            <img src="<?= htmlspecialchars($img) ?>" alt="" class="table-thumb">
+                                            <button type="button" class="thumb-delete" onclick="deleteProductImage(<?= $p['id'] ?>, '<?= htmlspecialchars($img, ENT_QUOTES) ?>', this)" title="Bild entfernen">&times;</button>
+                                        </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                    <input type="file" id="imgUpload-<?= $p['id'] ?>" accept="image/*" class="product-img-input" onchange="openImageEditor(<?= $p['id'] ?>, this)">
+                                    <label for="imgUpload-<?= $p['id'] ?>" class="btn btn-sm btn-outline product-img-btn">+ Bild</label>
+                                </div>
+                            </td>
                             <td><input type="text" class="table-input" value="<?= htmlspecialchars($p['name']) ?>" data-field="name"></td>
                             <td><?= htmlspecialchars($p['category']) ?></td>
                             <td><input type="number" step="0.01" class="table-input table-input-sm" value="<?= $p['regular_price'] ?>" data-field="regular_price"></td>
@@ -177,6 +190,53 @@ $products = get_products();
                         <?php endforeach; ?>
                     </tbody>
                 </table>
+            </div>
+        </div>
+
+        <!-- Image Editor Modal -->
+        <div class="image-editor-modal" id="imageEditorModal" style="display:none">
+            <div class="image-editor-backdrop" onclick="closeImageEditor()"></div>
+            <div class="image-editor-dialog">
+                <div class="image-editor-header">
+                    <h3>Bild bearbeiten</h3>
+                    <button class="image-editor-close" onclick="closeImageEditor()">&times;</button>
+                </div>
+                <div class="image-editor-body">
+                    <div class="image-editor-canvas-wrap">
+                        <canvas id="editorCanvas"></canvas>
+                    </div>
+                    <div class="image-editor-tools">
+                        <div class="editor-tool-group">
+                            <label>Drehen</label>
+                            <div class="editor-btn-row">
+                                <button type="button" class="btn btn-sm btn-outline" onclick="editorRotate(-90)">↶ 90°</button>
+                                <button type="button" class="btn btn-sm btn-outline" onclick="editorRotate(90)">↷ 90°</button>
+                            </div>
+                        </div>
+                        <div class="editor-tool-group">
+                            <label>Zuschnitt</label>
+                            <div class="editor-btn-row">
+                                <button type="button" class="btn btn-sm btn-outline editor-crop-btn" data-ratio="free" onclick="setCropRatio('free', this)">Frei</button>
+                                <button type="button" class="btn btn-sm btn-outline editor-crop-btn" data-ratio="1:1" onclick="setCropRatio('1:1', this)">1:1</button>
+                                <button type="button" class="btn btn-sm btn-outline editor-crop-btn" data-ratio="4:3" onclick="setCropRatio('4:3', this)">4:3</button>
+                                <button type="button" class="btn btn-sm btn-outline editor-crop-btn" data-ratio="16:9" onclick="setCropRatio('16:9', this)">16:9</button>
+                            </div>
+                        </div>
+                        <div class="editor-tool-group">
+                            <label>Max. Breite: <span id="editorMaxWidth">800</span>px</label>
+                            <input type="range" id="editorMaxWidthSlider" min="200" max="1600" step="100" value="800" oninput="document.getElementById('editorMaxWidth').textContent=this.value">
+                        </div>
+                        <div class="editor-tool-group">
+                            <label>Qualität: <span id="editorQuality">80</span>%</label>
+                            <input type="range" id="editorQualitySlider" min="30" max="100" step="5" value="80" oninput="document.getElementById('editorQuality').textContent=this.value">
+                        </div>
+                        <div class="editor-info" id="editorFileInfo"></div>
+                    </div>
+                </div>
+                <div class="image-editor-footer">
+                    <button type="button" class="btn btn-outline" onclick="closeImageEditor()">Abbrechen</button>
+                    <button type="button" class="btn btn-primary" onclick="editorUpload()">Hochladen</button>
+                </div>
             </div>
         </div>
 
@@ -350,4 +410,321 @@ document.getElementById('setSecondaryColor').addEventListener('input', function(
 document.getElementById('setSecondaryColorText').addEventListener('input', function() {
     document.getElementById('setSecondaryColor').value = this.value;
 });
+
+// ============================================
+// Product Image Upload & Editor
+// ============================================
+let editorState = {
+    productId: null,
+    originalImage: null,
+    rotation: 0,
+    cropRatio: 'free',
+    cropRect: null,
+    isDragging: false,
+    dragStart: null,
+    inputElement: null
+};
+
+function openImageEditor(productId, input) {
+    if (!input.files[0]) return;
+    const file = input.files[0];
+    editorState.productId = productId;
+    editorState.rotation = 0;
+    editorState.cropRatio = 'free';
+    editorState.cropRect = null;
+    editorState.inputElement = input;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+            editorState.originalImage = img;
+            document.getElementById('imageEditorModal').style.display = 'flex';
+            document.querySelectorAll('.editor-crop-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector('.editor-crop-btn[data-ratio="free"]').classList.add('active');
+            renderEditor();
+            updateFileInfo(file.size);
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
+function closeImageEditor() {
+    document.getElementById('imageEditorModal').style.display = 'none';
+    editorState.originalImage = null;
+    editorState.cropRect = null;
+    if (editorState.inputElement) {
+        editorState.inputElement.value = '';
+    }
+}
+
+function updateFileInfo(originalSize) {
+    const maxW = parseInt(document.getElementById('editorMaxWidthSlider').value);
+    const quality = parseInt(document.getElementById('editorQualitySlider').value);
+    const img = editorState.originalImage;
+    const info = document.getElementById('editorFileInfo');
+    const origW = (editorState.rotation % 180 !== 0) ? img.height : img.width;
+    const origH = (editorState.rotation % 180 !== 0) ? img.width : img.height;
+    const finalW = Math.min(origW, maxW);
+    const ratio = finalW / origW;
+    const finalH = Math.round(origH * ratio);
+    info.textContent = `Original: ${img.width}×${img.height} • Ausgabe: ~${finalW}×${finalH} • Qualität: ${quality}%`;
+}
+
+function renderEditor() {
+    const canvas = document.getElementById('editorCanvas');
+    const ctx = canvas.getContext('2d');
+    const img = editorState.originalImage;
+    const rot = editorState.rotation;
+
+    // Calculate display dimensions (fit within 500px)
+    const maxDisplay = 500;
+    let dw = img.width, dh = img.height;
+    if (rot % 180 !== 0) { dw = img.height; dh = img.width; }
+
+    const scale = Math.min(maxDisplay / dw, maxDisplay / dh, 1);
+    canvas.width = Math.round(dw * scale);
+    canvas.height = Math.round(dh * scale);
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.save();
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+    ctx.rotate(rot * Math.PI / 180);
+
+    const sw = (rot % 180 !== 0) ? canvas.height : canvas.width;
+    const sh = (rot % 180 !== 0) ? canvas.width : canvas.height;
+    ctx.drawImage(img, -sw / 2, -sh / 2, sw, sh);
+    ctx.restore();
+
+    // Draw crop overlay
+    if (editorState.cropRect) {
+        const cr = editorState.cropRect;
+        ctx.fillStyle = 'rgba(0,0,0,0.5)';
+        // Top
+        ctx.fillRect(0, 0, canvas.width, cr.y);
+        // Bottom
+        ctx.fillRect(0, cr.y + cr.h, canvas.width, canvas.height - cr.y - cr.h);
+        // Left
+        ctx.fillRect(0, cr.y, cr.x, cr.h);
+        // Right
+        ctx.fillRect(cr.x + cr.w, cr.y, canvas.width - cr.x - cr.w, cr.h);
+        // Border
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(cr.x, cr.y, cr.w, cr.h);
+        // Grid lines (rule of thirds)
+        ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+        ctx.lineWidth = 1;
+        for (let i = 1; i <= 2; i++) {
+            ctx.beginPath();
+            ctx.moveTo(cr.x + cr.w * i / 3, cr.y);
+            ctx.lineTo(cr.x + cr.w * i / 3, cr.y + cr.h);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(cr.x, cr.y + cr.h * i / 3);
+            ctx.lineTo(cr.x + cr.w, cr.y + cr.h * i / 3);
+            ctx.stroke();
+        }
+    }
+
+    editorState._scale = scale;
+}
+
+function editorRotate(deg) {
+    editorState.rotation = (editorState.rotation + deg + 360) % 360;
+    editorState.cropRect = null;
+    renderEditor();
+    updateFileInfo(0);
+}
+
+function setCropRatio(ratio, btn) {
+    document.querySelectorAll('.editor-crop-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    editorState.cropRatio = ratio;
+
+    if (ratio === 'free') {
+        editorState.cropRect = null;
+        renderEditor();
+        return;
+    }
+
+    const canvas = document.getElementById('editorCanvas');
+    const [rw, rh] = ratio.split(':').map(Number);
+    const targetRatio = rw / rh;
+    let cw, ch;
+    if (canvas.width / canvas.height > targetRatio) {
+        ch = canvas.height * 0.8;
+        cw = ch * targetRatio;
+    } else {
+        cw = canvas.width * 0.8;
+        ch = cw / targetRatio;
+    }
+    editorState.cropRect = {
+        x: Math.round((canvas.width - cw) / 2),
+        y: Math.round((canvas.height - ch) / 2),
+        w: Math.round(cw),
+        h: Math.round(ch)
+    };
+    renderEditor();
+}
+
+// Crop dragging
+(function() {
+    let dragType = null; // 'move' or 'resize'
+    let startX, startY, startCrop;
+
+    document.addEventListener('mousedown', function(e) {
+        if (!editorState.cropRect) return;
+        const canvas = document.getElementById('editorCanvas');
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const cr = editorState.cropRect;
+
+        if (x >= cr.x && x <= cr.x + cr.w && y >= cr.y && y <= cr.y + cr.h) {
+            // Check if near edge (resize) or interior (move)
+            const edge = 12;
+            const nearRight = Math.abs(x - (cr.x + cr.w)) < edge;
+            const nearBottom = Math.abs(y - (cr.y + cr.h)) < edge;
+            dragType = (nearRight || nearBottom) ? 'resize' : 'move';
+            startX = x; startY = y;
+            startCrop = {...cr};
+            e.preventDefault();
+        }
+    });
+
+    document.addEventListener('mousemove', function(e) {
+        if (!dragType || !editorState.cropRect) return;
+        const canvas = document.getElementById('editorCanvas');
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const dx = x - startX, dy = y - startY;
+        const cr = editorState.cropRect;
+
+        if (dragType === 'move') {
+            cr.x = Math.max(0, Math.min(canvas.width - cr.w, startCrop.x + dx));
+            cr.y = Math.max(0, Math.min(canvas.height - cr.h, startCrop.y + dy));
+        } else {
+            if (editorState.cropRatio !== 'free') {
+                const [rw, rh] = editorState.cropRatio.split(':').map(Number);
+                const ratio = rw / rh;
+                let newW = Math.max(40, startCrop.w + dx);
+                let newH = newW / ratio;
+                if (cr.x + newW > canvas.width) newW = canvas.width - cr.x;
+                newH = newW / ratio;
+                if (cr.y + newH > canvas.height) { newH = canvas.height - cr.y; newW = newH * ratio; }
+                cr.w = Math.round(newW);
+                cr.h = Math.round(newH);
+            } else {
+                cr.w = Math.max(40, Math.min(canvas.width - cr.x, startCrop.w + dx));
+                cr.h = Math.max(40, Math.min(canvas.height - cr.y, startCrop.h + dy));
+            }
+        }
+        renderEditor();
+    });
+
+    document.addEventListener('mouseup', function() {
+        dragType = null;
+    });
+})();
+
+function getEditedImageBlob(callback) {
+    const img = editorState.originalImage;
+    const rot = editorState.rotation;
+    const maxW = parseInt(document.getElementById('editorMaxWidthSlider').value);
+    const quality = parseInt(document.getElementById('editorQualitySlider').value) / 100;
+
+    // Create a full-resolution rotated canvas
+    const tmpCanvas = document.createElement('canvas');
+    const tmpCtx = tmpCanvas.getContext('2d');
+    let fullW = img.width, fullH = img.height;
+    if (rot % 180 !== 0) { fullW = img.height; fullH = img.width; }
+    tmpCanvas.width = fullW;
+    tmpCanvas.height = fullH;
+    tmpCtx.translate(fullW / 2, fullH / 2);
+    tmpCtx.rotate(rot * Math.PI / 180);
+    const sw = (rot % 180 !== 0) ? fullH : fullW;
+    const sh = (rot % 180 !== 0) ? fullW : fullH;
+    tmpCtx.drawImage(img, -sw / 2, -sh / 2, sw, sh);
+
+    // Apply crop
+    let srcX = 0, srcY = 0, srcW = fullW, srcH = fullH;
+    if (editorState.cropRect) {
+        const scale = editorState._scale;
+        srcX = Math.round(editorState.cropRect.x / scale);
+        srcY = Math.round(editorState.cropRect.y / scale);
+        srcW = Math.round(editorState.cropRect.w / scale);
+        srcH = Math.round(editorState.cropRect.h / scale);
+    }
+
+    // Resize to max width
+    let outW = srcW, outH = srcH;
+    if (outW > maxW) {
+        const r = maxW / outW;
+        outW = maxW;
+        outH = Math.round(outH * r);
+    }
+
+    const outCanvas = document.createElement('canvas');
+    outCanvas.width = outW;
+    outCanvas.height = outH;
+    const outCtx = outCanvas.getContext('2d');
+    outCtx.drawImage(tmpCanvas, srcX, srcY, srcW, srcH, 0, 0, outW, outH);
+
+    outCanvas.toBlob(function(blob) {
+        callback(blob, outW, outH);
+    }, 'image/jpeg', quality);
+}
+
+function editorUpload() {
+    const btn = document.querySelector('.image-editor-footer .btn-primary');
+    btn.disabled = true;
+    btn.textContent = 'Wird hochgeladen…';
+
+    getEditedImageBlob(function(blob, w, h) {
+        const fd = new FormData();
+        fd.append('image', blob, 'product_image.jpg');
+        fd.append('product_id', editorState.productId);
+
+        fetch('/api.php?action=upload_product_image', { method: 'POST', body: fd })
+            .then(r => r.json())
+            .then(data => {
+                btn.disabled = false;
+                btn.textContent = 'Hochladen';
+                if (data.success) {
+                    // Add thumbnail to the product row
+                    const thumbsContainer = document.getElementById('thumbs-' + editorState.productId);
+                    const wrap = document.createElement('div');
+                    wrap.className = 'product-thumb-wrap';
+                    wrap.innerHTML = `<img src="${data.url}" alt="" class="table-thumb"><button type="button" class="thumb-delete" onclick="deleteProductImage(${editorState.productId}, '${data.url}', this)" title="Bild entfernen">&times;</button>`;
+                    thumbsContainer.appendChild(wrap);
+                    closeImageEditor();
+                    showToast('Bild hochgeladen (' + w + '×' + h + 'px)');
+                } else {
+                    showToast(data.error || 'Upload fehlgeschlagen', 'error');
+                }
+            })
+            .catch(() => {
+                btn.disabled = false;
+                btn.textContent = 'Hochladen';
+                showToast('Upload fehlgeschlagen', 'error');
+            });
+    });
+}
+
+function deleteProductImage(productId, imageUrl, btn) {
+    if (!confirm('Bild wirklich entfernen?')) return;
+    fetch('/api.php?action=delete_product_image', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ product_id: productId, image_url: imageUrl })
+    }).then(r => r.json()).then(data => {
+        if (data.success) {
+            btn.closest('.product-thumb-wrap').remove();
+            showToast('Bild entfernt');
+        }
+    });
+}
 </script>

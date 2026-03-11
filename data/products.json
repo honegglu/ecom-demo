@@ -1,0 +1,368 @@
+[
+  {
+    "id": 1,
+    "sku": "woo-vneck-tee",
+    "name": "V-Neck T-Shirt",
+    "slug": "v-neck-t-shirt",
+    "type": "variable",
+    "short_description": "Lässiges V-Neck T-Shirt aus weicher Baumwolle – perfekt für jeden Tag.",
+    "description": "Dieses klassische V-Neck T-Shirt besticht durch seinen bequemen Schnitt und das weiche Baumwollmaterial. Ideal für den Alltag oder als Basis-Layer unter einem Hoodie. Erhältlich in verschiedenen Farben und Grössen.",
+    "regular_price": 20.00,
+    "sale_price": null,
+    "category": "T-Shirts",
+    "in_stock": true,
+    "stock_qty": 45,
+    "images": [
+      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/vneck-tee-2.jpg",
+      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/vnech-tee-green-1.jpg",
+      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/vnech-tee-blue-1.jpg"
+    ],
+    "attributes": [
+      {"name": "Farbe", "options": ["Rot", "Grün", "Blau"]},
+      {"name": "Grösse", "options": ["S", "M", "L"]}
+    ],
+    "variations": [
+      {"id": 101, "attributes": {"Farbe": "Rot", "Grösse": "S"}, "price": 20.00, "stock_qty": 8, "image": "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/vneck-tee-2.jpg"},
+      {"id": 102, "attributes": {"Farbe": "Rot", "Grösse": "M"}, "price": 20.00, "stock_qty": 10, "image": "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/vneck-tee-2.jpg"},
+      {"id": 103, "attributes": {"Farbe": "Rot", "Grösse": "L"}, "price": 20.00, "stock_qty": 5, "image": "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/vneck-tee-2.jpg"},
+      {"id": 104, "attributes": {"Farbe": "Grün", "Grösse": "S"}, "price": 20.00, "stock_qty": 7, "image": "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/vnech-tee-green-1.jpg"},
+      {"id": 105, "attributes": {"Farbe": "Grün", "Grösse": "M"}, "price": 20.00, "stock_qty": 12, "image": "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/vnech-tee-green-1.jpg"},
+      {"id": 106, "attributes": {"Farbe": "Grün", "Grösse": "L"}, "price": 20.00, "stock_qty": 3, "image": "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/vnech-tee-green-1.jpg"},
+      {"id": 107, "attributes": {"Farbe": "Blau", "Grösse": "S"}, "price": 15.00, "stock_qty": 9, "image": "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/vnech-tee-blue-1.jpg"},
+      {"id": 108, "attributes": {"Farbe": "Blau", "Grösse": "M"}, "price": 15.00, "stock_qty": 11, "image": "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/vnech-tee-blue-1.jpg"},
+      {"id": 109, "attributes": {"Farbe": "Blau", "Grösse": "L"}, "price": 15.00, "stock_qty": 6, "image": "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/vnech-tee-blue-1.jpg"}
+    ],
+    "featured": true
+  },
+  {
+    "id": 2,
+    "sku": "woo-hoodie",
+    "name": "Hoodie",
+    "slug": "hoodie",
+    "type": "variable",
+    "short_description": "Gemütlicher Hoodie aus schwerem Baumwollstoff – optional mit Logo.",
+    "description": "Unser beliebter Hoodie hält dich warm und sieht dabei lässig aus. Aus schwerem, vorgewaschenem Baumwollstoff gefertigt. Wähle deine Lieblingsfarbe und entscheide, ob du das Logo möchtest.",
+    "regular_price": 45.00,
+    "sale_price": null,
+    "category": "Hoodies",
+    "in_stock": true,
+    "stock_qty": 38,
+    "images": [
+      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/hoodie-2.jpg",
+      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/hoodie-blue-1.jpg",
+      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/hoodie-green-1.jpg",
+      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/hoodie-with-logo-2.jpg"
+    ],
+    "attributes": [
+      {"name": "Farbe", "options": ["Rot", "Grün", "Blau"]},
+      {"name": "Logo", "options": ["Ja", "Nein"]}
+    ],
+    "variations": [
+      {"id": 201, "attributes": {"Farbe": "Rot", "Logo": "Nein"}, "price": 42.00, "sale_price": null, "stock_qty": 6, "image": "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/hoodie-2.jpg"},
+      {"id": 202, "attributes": {"Farbe": "Grün", "Logo": "Nein"}, "price": 45.00, "stock_qty": 8, "image": "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/hoodie-green-1.jpg"},
+      {"id": 203, "attributes": {"Farbe": "Blau", "Logo": "Nein"}, "price": 45.00, "stock_qty": 7, "image": "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/hoodie-blue-1.jpg"},
+      {"id": 204, "attributes": {"Farbe": "Blau", "Logo": "Ja"}, "price": 45.00, "stock_qty": 5, "image": "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/hoodie-with-logo-2.jpg"},
+      {"id": 205, "attributes": {"Farbe": "Rot", "Logo": "Ja"}, "price": 45.00, "stock_qty": 4, "image": "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/hoodie-2.jpg"},
+      {"id": 206, "attributes": {"Farbe": "Grün", "Logo": "Ja"}, "price": 45.00, "stock_qty": 8, "image": "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/hoodie-green-1.jpg"}
+    ],
+    "featured": false
+  },
+  {
+    "id": 3,
+    "sku": "woo-hoodie-with-logo",
+    "name": "Hoodie mit Logo",
+    "slug": "hoodie-mit-logo",
+    "type": "simple",
+    "short_description": "Klassischer Hoodie mit aufgesticktem Logo.",
+    "description": "Dieser Hoodie kombiniert Komfort mit Style. Das dezent aufgestickte Logo auf der Brust macht ihn zum perfekten Begleiter für Freizeit und Sport. Aus hochwertiger Baumwolle gefertigt.",
+    "regular_price": 45.00,
+    "sale_price": null,
+    "category": "Hoodies",
+    "in_stock": true,
+    "stock_qty": 22,
+    "images": [
+      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/hoodie-with-logo-2.jpg"
+    ],
+    "attributes": [
+      {"name": "Farbe", "options": ["Blau"]}
+    ],
+    "variations": [],
+    "featured": false
+  },
+  {
+    "id": 4,
+    "sku": "woo-tshirt",
+    "name": "T-Shirt",
+    "slug": "t-shirt",
+    "type": "simple",
+    "short_description": "Einfaches, bequemes T-Shirt für jeden Anlass.",
+    "description": "Ein zeitloses T-Shirt, das in keinem Kleiderschrank fehlen darf. Der klassische Schnitt und die weiche Baumwolle sorgen für ganztägigen Tragekomfort.",
+    "regular_price": 18.00,
+    "sale_price": null,
+    "category": "T-Shirts",
+    "in_stock": true,
+    "stock_qty": 55,
+    "images": [
+      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/tshirt-2.jpg"
+    ],
+    "attributes": [
+      {"name": "Farbe", "options": ["Grau"]}
+    ],
+    "variations": [],
+    "featured": false
+  },
+  {
+    "id": 5,
+    "sku": "woo-beanie",
+    "name": "Beanie",
+    "slug": "beanie",
+    "type": "simple",
+    "short_description": "Warme Strickmütze für kalte Tage.",
+    "description": "Diese kuschelige Beanie aus Acryl-Strick hält deinen Kopf auch bei frostigen Temperaturen warm. Der elastische Bund sorgt für perfekten Sitz.",
+    "regular_price": 20.00,
+    "sale_price": 18.00,
+    "category": "Accessoires",
+    "in_stock": true,
+    "stock_qty": 30,
+    "images": [
+      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/beanie-2.jpg"
+    ],
+    "attributes": [
+      {"name": "Farbe", "options": ["Rot"]}
+    ],
+    "variations": [],
+    "featured": false
+  },
+  {
+    "id": 6,
+    "sku": "woo-belt",
+    "name": "Gürtel",
+    "slug": "guertel",
+    "type": "simple",
+    "short_description": "Eleganter Ledergürtel mit gebürsteter Metallschnalle.",
+    "description": "Ein hochwertiger Ledergürtel, der jedes Outfit aufwertet. Die gebürstete Metallschnalle verleiht einen modernen Touch. Passend für Jeans und Chinos.",
+    "regular_price": 65.00,
+    "sale_price": 55.00,
+    "category": "Accessoires",
+    "in_stock": true,
+    "stock_qty": 15,
+    "images": [
+      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/belt-2.jpg"
+    ],
+    "attributes": [],
+    "variations": [],
+    "featured": false
+  },
+  {
+    "id": 7,
+    "sku": "woo-cap",
+    "name": "Cap",
+    "slug": "cap",
+    "type": "simple",
+    "short_description": "Stylische Kappe mit verstellbarem Verschluss.",
+    "description": "Diese lässige Cap schützt dich vor der Sonne und sieht dabei noch gut aus. Der verstellbare Snapback-Verschluss sorgt für die perfekte Passform.",
+    "regular_price": 18.00,
+    "sale_price": 16.00,
+    "category": "Accessoires",
+    "in_stock": true,
+    "stock_qty": 42,
+    "images": [
+      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/cap-2.jpg"
+    ],
+    "attributes": [
+      {"name": "Farbe", "options": ["Gelb"]}
+    ],
+    "variations": [],
+    "featured": true
+  },
+  {
+    "id": 8,
+    "sku": "woo-sunglasses",
+    "name": "Sonnenbrille",
+    "slug": "sonnenbrille",
+    "type": "simple",
+    "short_description": "Trendige Sonnenbrille mit UV400-Schutz.",
+    "description": "Diese modische Sonnenbrille bietet vollen UV400-Schutz und sieht dabei fantastisch aus. Leichter Rahmen für maximalen Tragekomfort den ganzen Tag.",
+    "regular_price": 90.00,
+    "sale_price": null,
+    "category": "Accessoires",
+    "in_stock": true,
+    "stock_qty": 18,
+    "images": [
+      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/sunglasses-2.jpg"
+    ],
+    "attributes": [],
+    "variations": [],
+    "featured": true
+  },
+  {
+    "id": 9,
+    "sku": "woo-hoodie-with-pocket",
+    "name": "Hoodie mit Tasche",
+    "slug": "hoodie-mit-tasche",
+    "type": "simple",
+    "short_description": "Bequemer Hoodie mit praktischer Kängurutasche.",
+    "description": "Dieser Hoodie vereint Style und Funktionalität. Die grosse Kängurutasche bietet Platz für alles, was du unterwegs brauchst. Aus weichem Fleece-Material.",
+    "regular_price": 45.00,
+    "sale_price": 35.00,
+    "category": "Hoodies",
+    "in_stock": true,
+    "stock_qty": 12,
+    "images": [
+      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/hoodie-with-pocket-2.jpg"
+    ],
+    "attributes": [
+      {"name": "Farbe", "options": ["Grau"]}
+    ],
+    "variations": [],
+    "featured": true
+  },
+  {
+    "id": 10,
+    "sku": "woo-hoodie-with-zipper",
+    "name": "Hoodie mit Reissverschluss",
+    "slug": "hoodie-mit-reissverschluss",
+    "type": "simple",
+    "short_description": "Sportlicher Zip-Hoodie für aktive Tage.",
+    "description": "Der perfekte Hoodie für alle, die es praktisch mögen. Der durchgehende Reissverschluss macht das An- und Ausziehen zum Kinderspiel. Ideal für Sport und Freizeit.",
+    "regular_price": 45.00,
+    "sale_price": null,
+    "category": "Hoodies",
+    "in_stock": true,
+    "stock_qty": 25,
+    "images": [
+      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/hoodie-with-zipper-2.jpg"
+    ],
+    "attributes": [],
+    "variations": [],
+    "featured": true
+  },
+  {
+    "id": 11,
+    "sku": "woo-long-sleeve-tee",
+    "name": "Langarm-Shirt",
+    "slug": "langarm-shirt",
+    "type": "simple",
+    "short_description": "Vielseitiges Langarm-Shirt aus weicher Baumwolle.",
+    "description": "Dieses Langarm-Shirt ist der perfekte Begleiter für die Übergangszeit. Weiche Baumwolle und ein entspannter Schnitt sorgen für ganztägigen Komfort.",
+    "regular_price": 25.00,
+    "sale_price": null,
+    "category": "T-Shirts",
+    "in_stock": true,
+    "stock_qty": 33,
+    "images": [
+      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/long-sleeve-tee-2.jpg"
+    ],
+    "attributes": [
+      {"name": "Farbe", "options": ["Grün"]}
+    ],
+    "variations": [],
+    "featured": false
+  },
+  {
+    "id": 12,
+    "sku": "woo-polo",
+    "name": "Polo-Shirt",
+    "slug": "polo-shirt",
+    "type": "simple",
+    "short_description": "Klassisches Polo-Shirt für einen gepflegten Look.",
+    "description": "Das zeitlose Polo-Shirt verbindet sportliche Eleganz mit Alltagstauglichkeit. Der Piqué-Stoff ist atmungsaktiv und formstabil – perfekt für Business Casual.",
+    "regular_price": 20.00,
+    "sale_price": null,
+    "category": "T-Shirts",
+    "in_stock": true,
+    "stock_qty": 40,
+    "images": [
+      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/polo-2.jpg"
+    ],
+    "attributes": [
+      {"name": "Farbe", "options": ["Blau"]}
+    ],
+    "variations": [],
+    "featured": false
+  },
+  {
+    "id": 13,
+    "sku": "woo-album",
+    "name": "Album",
+    "slug": "album",
+    "type": "simple",
+    "short_description": "Digitales Album mit exklusiven Tracks.",
+    "description": "Dieses digitale Album enthält eine Sammlung exklusiver Tracks. Nach dem Kauf erhältst du sofortigen Zugang zum Download in hoher Audioqualität.",
+    "regular_price": 15.00,
+    "sale_price": null,
+    "category": "Musik",
+    "in_stock": true,
+    "stock_qty": 999,
+    "images": [
+      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2022/05/album-1.jpg"
+    ],
+    "attributes": [],
+    "variations": [],
+    "featured": false
+  },
+  {
+    "id": 14,
+    "sku": "woo-single",
+    "name": "Single",
+    "slug": "single",
+    "type": "simple",
+    "short_description": "Digitale Single zum sofortigen Download.",
+    "description": "Lade diese digitale Single sofort herunter und geniesse den neuesten Hit in bester Audioqualität. Kompatibel mit allen gängigen Musikplayern.",
+    "regular_price": 3.00,
+    "sale_price": 2.00,
+    "category": "Musik",
+    "in_stock": true,
+    "stock_qty": 999,
+    "images": [
+      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/single-1.jpg"
+    ],
+    "attributes": [],
+    "variations": [],
+    "featured": false
+  },
+  {
+    "id": 15,
+    "sku": "woo-tshirt-logo",
+    "name": "T-Shirt mit Logo",
+    "slug": "t-shirt-mit-logo",
+    "type": "simple",
+    "short_description": "Bequemes T-Shirt mit stylischem Logo-Print.",
+    "description": "Zeige deinen Style mit diesem T-Shirt mit Logo-Print. Das hochwertige Druckverfahren garantiert langlebige Farben auch nach vielen Waschgängen.",
+    "regular_price": 18.00,
+    "sale_price": null,
+    "category": "T-Shirts",
+    "in_stock": true,
+    "stock_qty": 28,
+    "images": [
+      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/t-shirt-with-logo-1.jpg"
+    ],
+    "attributes": [
+      {"name": "Farbe", "options": ["Grau"]}
+    ],
+    "variations": [],
+    "featured": false
+  },
+  {
+    "id": 16,
+    "sku": "woo-beanie-logo",
+    "name": "Beanie mit Logo",
+    "slug": "beanie-mit-logo",
+    "type": "simple",
+    "short_description": "Warme Beanie mit eingesticktem Logo.",
+    "description": "Kombiniere Wärme mit Style: Diese Beanie mit eingesticktem Logo ist der perfekte Winterbegleiter. Weicher Strick und ein dezentes Logo machen sie zum Hingucker.",
+    "regular_price": 20.00,
+    "sale_price": 18.00,
+    "category": "Accessoires",
+    "in_stock": true,
+    "stock_qty": 35,
+    "images": [
+      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/beanie-with-logo-1.jpg"
+    ],
+    "attributes": [
+      {"name": "Farbe", "options": ["Rot"]}
+    ],
+    "variations": [],
+    "featured": false
+  }
+]

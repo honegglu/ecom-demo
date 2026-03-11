@@ -120,76 +120,162 @@ $products = get_products();
 
         <!-- Products -->
         <div class="settings-panel" id="tab-products">
-            <h2>Produkte verwalten</h2>
-            <div class="products-table-wrap">
-                <table class="products-table">
-                    <thead>
-                        <tr>
-                            <th>Bilder</th>
-                            <th>Name</th>
-                            <th>Kategorie</th>
-                            <th>Preis</th>
-                            <th>Aktionspreis</th>
-                            <th>Bestand</th>
-                            <th>Aktion</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($products as $p): ?>
-                        <tr data-product-id="<?= $p['id'] ?>">
-                            <td>
-                                <div class="product-images-cell">
-                                    <div class="product-thumbs" id="thumbs-<?= $p['id'] ?>">
-                                        <?php foreach (($p['images'] ?? []) as $img): ?>
-                                        <div class="product-thumb-wrap">
-                                            <img src="<?= htmlspecialchars($img) ?>" alt="" class="table-thumb">
-                                            <button type="button" class="thumb-delete" onclick="deleteProductImage(<?= $p['id'] ?>, '<?= htmlspecialchars($img, ENT_QUOTES) ?>', this)" title="Bild entfernen">&times;</button>
-                                        </div>
-                                        <?php endforeach; ?>
-                                    </div>
-                                    <input type="file" id="imgUpload-<?= $p['id'] ?>" accept="image/*" class="product-img-input" onchange="openImageEditor(<?= $p['id'] ?>, this)">
-                                    <label for="imgUpload-<?= $p['id'] ?>" class="btn btn-sm btn-outline product-img-btn">+ Bild</label>
-                                </div>
-                            </td>
-                            <td><input type="text" class="table-input" value="<?= htmlspecialchars($p['name']) ?>" data-field="name"></td>
-                            <td><?= htmlspecialchars($p['category']) ?></td>
-                            <td><input type="number" step="0.01" class="table-input table-input-sm" value="<?= $p['regular_price'] ?>" data-field="regular_price"></td>
-                            <td><input type="number" step="0.01" class="table-input table-input-sm" value="<?= $p['sale_price'] ?? '' ?>" data-field="sale_price" placeholder="–"></td>
-                            <td><input type="number" class="table-input table-input-sm" value="<?= $p['stock_qty'] ?>" data-field="stock_qty"></td>
-                            <td>
-                                <button class="btn btn-sm btn-outline" onclick="saveProduct(<?= $p['id'] ?>, this)">Speichern</button>
-                                <?php if (!empty($p['variations'])): ?>
-                                    <button class="btn btn-sm btn-outline" onclick="toggleVariations(<?= $p['id'] ?>)">Varianten</button>
-                                <?php endif; ?>
-                            </td>
-                        </tr>
-                        <?php if (!empty($p['variations'])): ?>
-                        <tr class="variations-row" id="variations-<?= $p['id'] ?>" style="display:none">
-                            <td colspan="7">
-                                <table class="variations-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Variante</th>
-                                            <th>Preis</th>
-                                            <th>Bestand</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($p['variations'] as $vi => $v): ?>
-                                        <tr data-var-index="<?= $vi ?>">
-                                            <td><?= htmlspecialchars(implode(', ', array_map(fn($k,$val) => "$k: $val", array_keys($v['attributes']), $v['attributes']))) ?></td>
-                                            <td><input type="number" step="0.01" class="table-input table-input-sm" value="<?= $v['price'] ?>" data-var-field="price"></td>
-                                            <td><input type="number" class="table-input table-input-sm" value="<?= $v['stock_qty'] ?>" data-var-field="stock_qty"></td>
-                                        </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
+            <div class="pm-header">
+                <h2>Produkte verwalten</h2>
+                <button class="btn btn-primary btn-sm" onclick="openProductModal(null)">+ Neues Produkt</button>
+            </div>
+
+            <div class="pm-list" id="productList">
+                <?php foreach ($products as $p): ?>
+                <div class="pm-card" data-product-id="<?= $p['id'] ?>">
+                    <div class="pm-card-img">
+                        <?php if (!empty($p['images'][0])): ?>
+                            <img src="<?= htmlspecialchars($p['images'][0]) ?>" alt="">
+                        <?php else: ?>
+                            <div class="pm-card-no-img">Kein Bild</div>
                         <?php endif; ?>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                    </div>
+                    <div class="pm-card-body">
+                        <div class="pm-card-title"><?= htmlspecialchars($p['name']) ?></div>
+                        <div class="pm-card-meta">
+                            <span class="pm-badge"><?= htmlspecialchars($p['category']) ?></span>
+                            <span class="pm-card-type"><?= $p['type'] === 'variable' ? 'Variabel' : 'Einfach' ?></span>
+                        </div>
+                    </div>
+                    <div class="pm-card-price">
+                        <?php if ($p['sale_price']): ?>
+                            <span class="pm-price-sale"><?= format_price($p['sale_price'], $settings) ?></span>
+                            <span class="pm-price-old"><?= format_price($p['regular_price'], $settings) ?></span>
+                        <?php else: ?>
+                            <span class="pm-price"><?= format_price($p['regular_price'], $settings) ?></span>
+                        <?php endif; ?>
+                    </div>
+                    <div class="pm-card-stock">
+                        <span class="pm-stock-num <?= $p['stock_qty'] < 5 ? 'pm-stock-low' : '' ?>"><?= $p['stock_qty'] ?></span>
+                        <span class="pm-stock-label">Bestand</span>
+                    </div>
+                    <div class="pm-card-actions">
+                        <button class="btn btn-sm btn-outline" onclick="openProductModal(<?= $p['id'] ?>)">Bearbeiten</button>
+                        <button class="btn btn-sm btn-outline pm-btn-delete" onclick="deleteProduct(<?= $p['id'] ?>, '<?= htmlspecialchars($p['name'], ENT_QUOTES) ?>')">Löschen</button>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+
+        <!-- Product Editor Modal -->
+        <div class="pm-modal" id="productModal" style="display:none">
+            <div class="pm-modal-backdrop" onclick="closeProductModal()"></div>
+            <div class="pm-modal-dialog">
+                <div class="pm-modal-header">
+                    <h3 id="productModalTitle">Produkt bearbeiten</h3>
+                    <button class="pm-modal-close" onclick="closeProductModal()">&times;</button>
+                </div>
+                <div class="pm-modal-body">
+                    <input type="hidden" id="pmId">
+
+                    <!-- Tab navigation within modal -->
+                    <div class="pm-tabs">
+                        <button class="pm-tab active" onclick="switchPmTab(this, 'pm-general')">Allgemein</button>
+                        <button class="pm-tab" onclick="switchPmTab(this, 'pm-images')">Bilder</button>
+                        <button class="pm-tab" onclick="switchPmTab(this, 'pm-variations')" id="pmVariationsTab" style="display:none">Varianten</button>
+                    </div>
+
+                    <!-- General tab -->
+                    <div class="pm-tab-content active" id="pm-general">
+                        <div class="form-row form-row-2">
+                            <div class="form-group">
+                                <label for="pmName">Produktname *</label>
+                                <input type="text" id="pmName" placeholder="z.B. V-Neck T-Shirt">
+                            </div>
+                            <div class="form-group">
+                                <label for="pmSku">SKU</label>
+                                <input type="text" id="pmSku" placeholder="z.B. woo-vneck-tee">
+                            </div>
+                        </div>
+                        <div class="form-row form-row-2">
+                            <div class="form-group">
+                                <label for="pmCategory">Kategorie</label>
+                                <input type="text" id="pmCategory" list="pmCategoryList" placeholder="z.B. T-Shirts">
+                                <datalist id="pmCategoryList">
+                                    <?php foreach (get_categories() as $cat): ?>
+                                    <option value="<?= htmlspecialchars($cat) ?>">
+                                    <?php endforeach; ?>
+                                </datalist>
+                            </div>
+                            <div class="form-group">
+                                <label for="pmType">Typ</label>
+                                <select id="pmType" onchange="toggleVariationsTab()">
+                                    <option value="simple">Einfach</option>
+                                    <option value="variable">Variabel (Farbe, Grösse...)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row form-row-2">
+                            <div class="form-group">
+                                <label for="pmPrice">Preis (<?= $settings['currency'] ?? 'CHF' ?>)</label>
+                                <input type="number" step="0.01" id="pmPrice" placeholder="0.00">
+                            </div>
+                            <div class="form-group">
+                                <label for="pmSalePrice">Aktionspreis</label>
+                                <input type="number" step="0.01" id="pmSalePrice" placeholder="Leer = kein Aktionspreis">
+                            </div>
+                        </div>
+                        <div class="form-row form-row-2">
+                            <div class="form-group">
+                                <label for="pmStock">Bestand</label>
+                                <input type="number" id="pmStock" placeholder="0">
+                            </div>
+                            <div class="form-group">
+                                <label>&nbsp;</label>
+                                <label class="toggle-label" style="margin-top:4px">
+                                    <input type="checkbox" id="pmFeatured">
+                                    Hervorgehoben (Featured)
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="pmShortDesc">Kurzbeschreibung</label>
+                            <textarea id="pmShortDesc" rows="2" placeholder="Kurzer Teaser-Text"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="pmDesc">Beschreibung</label>
+                            <textarea id="pmDesc" rows="4" placeholder="Ausführliche Produktbeschreibung"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Images tab -->
+                    <div class="pm-tab-content" id="pm-images">
+                        <div class="pm-images-grid" id="pmImagesGrid">
+                            <!-- filled by JS -->
+                        </div>
+                        <div class="pm-images-upload">
+                            <input type="file" id="pmImageUpload" accept="image/*" class="product-img-input" onchange="openImageEditor(0, this)">
+                            <label for="pmImageUpload" class="pm-upload-zone">
+                                <span class="pm-upload-icon">+</span>
+                                <span>Bild hochladen</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Variations tab -->
+                    <div class="pm-tab-content" id="pm-variations">
+                        <div class="pm-var-attributes" id="pmAttributes">
+                            <!-- filled by JS -->
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline" onclick="addAttribute()" style="margin-bottom:16px">+ Attribut hinzufügen</button>
+
+                        <h4 style="margin:0 0 8px">Varianten</h4>
+                        <div class="pm-var-list" id="pmVariationsList">
+                            <!-- filled by JS -->
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline" onclick="generateVariations()">Varianten generieren</button>
+                    </div>
+                </div>
+                <div class="pm-modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="closeProductModal()">Abbrechen</button>
+                    <button type="button" class="btn btn-primary" id="pmSaveBtn" onclick="saveProductModal()">Speichern</button>
+                </div>
             </div>
         </div>
 
@@ -345,42 +431,322 @@ function saveCheckoutSettings(e) {
     return false;
 }
 
-function saveProduct(id, btn) {
-    const row = btn.closest('tr');
-    const data = {id: id};
-    row.querySelectorAll('[data-field]').forEach(input => {
-        const field = input.dataset.field;
-        data[field] = input.value;
-    });
+// ============================================
+// Product data cache (from PHP)
+// ============================================
+const PRODUCTS_DATA = <?= json_encode($products, JSON_UNESCAPED_UNICODE) ?>;
 
-    // Check for variations
-    const varRow = document.getElementById('variations-' + id);
-    if (varRow) {
-        const variations = [];
-        varRow.querySelectorAll('tr[data-var-index]').forEach(vr => {
-            const vi = parseInt(vr.dataset.varIndex);
-            const varData = {};
-            vr.querySelectorAll('[data-var-field]').forEach(input => {
-                varData[input.dataset.varField] = input.value;
-            });
-            variations.push({index: vi, ...varData});
-        });
-        if (variations.length > 0) {
-            // Reconstruct full variations array – fetch current and merge
-            data._variation_updates = variations;
-        }
+function getProductById(id) {
+    return PRODUCTS_DATA.find(p => p.id === id);
+}
+
+// ============================================
+// Product Modal
+// ============================================
+let currentEditProduct = null;
+
+function openProductModal(id) {
+    currentEditProduct = id ? getProductById(id) : null;
+    const modal = document.getElementById('productModal');
+    const title = document.getElementById('productModalTitle');
+
+    if (currentEditProduct) {
+        title.textContent = 'Produkt bearbeiten';
+        document.getElementById('pmId').value = currentEditProduct.id;
+        document.getElementById('pmName').value = currentEditProduct.name || '';
+        document.getElementById('pmSku').value = currentEditProduct.sku || '';
+        document.getElementById('pmCategory').value = currentEditProduct.category || '';
+        document.getElementById('pmType').value = currentEditProduct.type || 'simple';
+        document.getElementById('pmPrice').value = currentEditProduct.regular_price || '';
+        document.getElementById('pmSalePrice').value = currentEditProduct.sale_price || '';
+        document.getElementById('pmStock').value = currentEditProduct.stock_qty ?? 0;
+        document.getElementById('pmFeatured').checked = currentEditProduct.featured || false;
+        document.getElementById('pmShortDesc').value = currentEditProduct.short_description || '';
+        document.getElementById('pmDesc').value = currentEditProduct.description || '';
+    } else {
+        title.textContent = 'Neues Produkt';
+        document.getElementById('pmId').value = '';
+        document.getElementById('pmName').value = '';
+        document.getElementById('pmSku').value = '';
+        document.getElementById('pmCategory').value = '';
+        document.getElementById('pmType').value = 'simple';
+        document.getElementById('pmPrice').value = '';
+        document.getElementById('pmSalePrice').value = '';
+        document.getElementById('pmStock').value = '0';
+        document.getElementById('pmFeatured').checked = false;
+        document.getElementById('pmShortDesc').value = '';
+        document.getElementById('pmDesc').value = '';
     }
 
-    fetch('/api.php?action=save_product', {
+    toggleVariationsTab();
+    renderProductImages();
+    renderAttributes();
+    renderVariations();
+
+    // Reset to first tab
+    switchPmTab(document.querySelector('.pm-tab'), 'pm-general');
+    modal.style.display = 'flex';
+}
+
+function closeProductModal() {
+    document.getElementById('productModal').style.display = 'none';
+    currentEditProduct = null;
+}
+
+function switchPmTab(btn, tabId) {
+    document.querySelectorAll('.pm-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.pm-tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(tabId).classList.add('active');
+}
+
+function toggleVariationsTab() {
+    const isVariable = document.getElementById('pmType').value === 'variable';
+    document.getElementById('pmVariationsTab').style.display = isVariable ? '' : 'none';
+}
+
+function renderProductImages() {
+    const grid = document.getElementById('pmImagesGrid');
+    const images = currentEditProduct ? (currentEditProduct.images || []) : [];
+    grid.innerHTML = images.map((url, i) => `
+        <div class="pm-img-item" data-index="${i}">
+            <img src="${escapeHtml(url)}" alt="">
+            <button type="button" class="pm-img-delete" onclick="removeProductImage(${i})" title="Entfernen">&times;</button>
+        </div>
+    `).join('');
+
+    // Update the file input's product ID
+    editorState.productId = currentEditProduct ? currentEditProduct.id : 0;
+}
+
+function removeProductImage(index) {
+    if (!currentEditProduct) return;
+    const url = currentEditProduct.images[index];
+    fetch('/api.php?action=delete_product_image', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ product_id: currentEditProduct.id, image_url: url })
+    }).then(r => r.json()).then(data => {
+        if (data.success) {
+            currentEditProduct.images.splice(index, 1);
+            renderProductImages();
+            showToast('Bild entfernt');
+        }
+    });
+}
+
+// ============================================
+// Attributes & Variations
+// ============================================
+function renderAttributes() {
+    const container = document.getElementById('pmAttributes');
+    const attrs = currentEditProduct ? (currentEditProduct.attributes || []) : [];
+    container.innerHTML = attrs.map((a, i) => `
+        <div class="pm-attr-row" data-attr-index="${i}">
+            <div class="form-group" style="flex:1">
+                <label>Attributname</label>
+                <input type="text" class="pm-attr-name" value="${escapeHtml(a.name)}" placeholder="z.B. Farbe">
+            </div>
+            <div class="form-group" style="flex:2">
+                <label>Werte (kommagetrennt)</label>
+                <input type="text" class="pm-attr-options" value="${escapeHtml((a.options || []).join(', '))}" placeholder="z.B. Rot, Grün, Blau">
+            </div>
+            <button type="button" class="btn btn-sm pm-attr-delete" onclick="removeAttribute(${i})" title="Entfernen">&times;</button>
+        </div>
+    `).join('');
+}
+
+function addAttribute() {
+    if (!currentEditProduct) {
+        currentEditProduct = { attributes: [], variations: [], images: [] };
+    }
+    if (!currentEditProduct.attributes) currentEditProduct.attributes = [];
+    currentEditProduct.attributes.push({ name: '', options: [] });
+    renderAttributes();
+}
+
+function removeAttribute(index) {
+    if (!currentEditProduct || !currentEditProduct.attributes) return;
+    currentEditProduct.attributes.splice(index, 1);
+    renderAttributes();
+}
+
+function getAttributesFromUI() {
+    const rows = document.querySelectorAll('.pm-attr-row');
+    const attrs = [];
+    rows.forEach(row => {
+        const name = row.querySelector('.pm-attr-name').value.trim();
+        const opts = row.querySelector('.pm-attr-options').value.split(',').map(s => s.trim()).filter(Boolean);
+        if (name && opts.length > 0) {
+            attrs.push({ name, options: opts });
+        }
+    });
+    return attrs;
+}
+
+function renderVariations() {
+    const list = document.getElementById('pmVariationsList');
+    const vars = currentEditProduct ? (currentEditProduct.variations || []) : [];
+    if (vars.length === 0) {
+        list.innerHTML = '<p class="pm-var-empty">Keine Varianten vorhanden. Definiere Attribute und klicke "Varianten generieren".</p>';
+        return;
+    }
+    list.innerHTML = vars.map((v, i) => {
+        const attrStr = Object.entries(v.attributes || {}).map(([k, val]) => `${k}: ${val}`).join(', ');
+        return `
+        <div class="pm-var-row" data-var-index="${i}">
+            <span class="pm-var-label">${escapeHtml(attrStr)}</span>
+            <div class="pm-var-fields">
+                <div class="form-group">
+                    <label>Preis</label>
+                    <input type="number" step="0.01" class="pm-var-price" value="${v.price || ''}">
+                </div>
+                <div class="form-group">
+                    <label>Bestand</label>
+                    <input type="number" class="pm-var-stock" value="${v.stock_qty ?? 0}">
+                </div>
+            </div>
+            <button type="button" class="btn btn-sm pm-attr-delete" onclick="removeVariation(${i})">&times;</button>
+        </div>`;
+    }).join('');
+}
+
+function removeVariation(index) {
+    if (!currentEditProduct) return;
+    currentEditProduct.variations.splice(index, 1);
+    renderVariations();
+}
+
+function generateVariations() {
+    const attrs = getAttributesFromUI();
+    if (attrs.length === 0) {
+        showToast('Bitte zuerst Attribute mit Werten definieren');
+        return;
+    }
+    // Generate cartesian product
+    const combinations = attrs.reduce((acc, attr) => {
+        if (acc.length === 0) return attr.options.map(opt => [{ name: attr.name, value: opt }]);
+        const result = [];
+        acc.forEach(combo => {
+            attr.options.forEach(opt => {
+                result.push([...combo, { name: attr.name, value: opt }]);
+            });
+        });
+        return result;
+    }, []);
+
+    const basePrice = parseFloat(document.getElementById('pmPrice').value) || 0;
+    const existingVars = currentEditProduct ? (currentEditProduct.variations || []) : [];
+
+    const newVars = combinations.map((combo, i) => {
+        const attributes = {};
+        combo.forEach(c => { attributes[c.name] = c.value; });
+        // Keep existing data if variation matches
+        const existing = existingVars.find(v => {
+            return JSON.stringify(v.attributes) === JSON.stringify(attributes);
+        });
+        return {
+            id: existing?.id || (1000 + i),
+            attributes,
+            price: existing?.price ?? basePrice,
+            stock_qty: existing?.stock_qty ?? 0,
+            image: existing?.image || ''
+        };
+    });
+
+    if (!currentEditProduct) currentEditProduct = { attributes: [], variations: [], images: [] };
+    currentEditProduct.attributes = attrs;
+    currentEditProduct.variations = newVars;
+    renderVariations();
+    showToast(newVars.length + ' Varianten generiert');
+}
+
+function getVariationsFromUI() {
+    const rows = document.querySelectorAll('.pm-var-row');
+    const current = currentEditProduct ? (currentEditProduct.variations || []) : [];
+    rows.forEach((row, i) => {
+        if (current[i]) {
+            current[i].price = parseFloat(row.querySelector('.pm-var-price').value) || 0;
+            current[i].stock_qty = parseInt(row.querySelector('.pm-var-stock').value) || 0;
+        }
+    });
+    return current;
+}
+
+// ============================================
+// Save Product (create or update)
+// ============================================
+function saveProductModal() {
+    const name = document.getElementById('pmName').value.trim();
+    if (!name) {
+        showToast('Bitte Produktname eingeben');
+        document.getElementById('pmName').focus();
+        return;
+    }
+
+    const btn = document.getElementById('pmSaveBtn');
+    btn.disabled = true;
+    btn.textContent = 'Wird gespeichert…';
+
+    const type = document.getElementById('pmType').value;
+    const attrs = type === 'variable' ? getAttributesFromUI() : [];
+    const vars = type === 'variable' ? getVariationsFromUI() : [];
+
+    const data = {
+        name: name,
+        sku: document.getElementById('pmSku').value.trim(),
+        category: document.getElementById('pmCategory').value.trim(),
+        type: type,
+        regular_price: parseFloat(document.getElementById('pmPrice').value) || 0,
+        sale_price: document.getElementById('pmSalePrice').value.trim() || null,
+        stock_qty: parseInt(document.getElementById('pmStock').value) || 0,
+        featured: document.getElementById('pmFeatured').checked,
+        short_description: document.getElementById('pmShortDesc').value.trim(),
+        description: document.getElementById('pmDesc').value.trim(),
+        attributes: attrs,
+        variations: vars,
+    };
+
+    const id = document.getElementById('pmId').value;
+    const isNew = !id;
+    const action = isNew ? 'create_product' : 'save_product';
+    if (!isNew) data.id = parseInt(id);
+
+    fetch('/api.php?action=' + action, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
-    }).then(r => r.json()).then(() => showToast('Produkt gespeichert'));
+    })
+    .then(r => r.json())
+    .then(result => {
+        btn.disabled = false;
+        btn.textContent = 'Speichern';
+        if (result.success) {
+            showToast(isNew ? 'Produkt erstellt' : 'Produkt gespeichert');
+            setTimeout(() => location.reload(), 400);
+        } else {
+            showToast(result.error || 'Fehler beim Speichern', 'error');
+        }
+    })
+    .catch(() => {
+        btn.disabled = false;
+        btn.textContent = 'Speichern';
+        showToast('Fehler beim Speichern', 'error');
+    });
 }
 
-function toggleVariations(id) {
-    const row = document.getElementById('variations-' + id);
-    row.style.display = row.style.display === 'none' ? 'table-row' : 'none';
+function deleteProduct(id, name) {
+    if (!confirm('Produkt "' + name + '" wirklich löschen? Dies kann nicht rückgängig gemacht werden.')) return;
+    fetch('/api.php?action=delete_product', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ id: id })
+    }).then(r => r.json()).then(data => {
+        if (data.success) {
+            showToast('Produkt gelöscht');
+            document.querySelector('.pm-card[data-product-id="' + id + '"]').remove();
+        }
+    });
 }
 
 function uploadLogo(input) {
@@ -683,10 +1049,12 @@ function editorUpload() {
     btn.disabled = true;
     btn.textContent = 'Wird hochgeladen…';
 
+    const productId = editorState.productId || (currentEditProduct ? currentEditProduct.id : 0);
+
     getEditedImageBlob(function(blob, w, h) {
         const fd = new FormData();
         fd.append('image', blob, 'product_image.jpg');
-        fd.append('product_id', editorState.productId);
+        fd.append('product_id', productId);
 
         fetch('/api.php?action=upload_product_image', { method: 'POST', body: fd })
             .then(r => r.json())
@@ -694,12 +1062,12 @@ function editorUpload() {
                 btn.disabled = false;
                 btn.textContent = 'Hochladen';
                 if (data.success) {
-                    // Add thumbnail to the product row
-                    const thumbsContainer = document.getElementById('thumbs-' + editorState.productId);
-                    const wrap = document.createElement('div');
-                    wrap.className = 'product-thumb-wrap';
-                    wrap.innerHTML = `<img src="${data.url}" alt="" class="table-thumb"><button type="button" class="thumb-delete" onclick="deleteProductImage(${editorState.productId}, '${data.url}', this)" title="Bild entfernen">&times;</button>`;
-                    thumbsContainer.appendChild(wrap);
+                    // Add to current product's images
+                    if (currentEditProduct) {
+                        if (!currentEditProduct.images) currentEditProduct.images = [];
+                        currentEditProduct.images.push(data.url);
+                        renderProductImages();
+                    }
                     closeImageEditor();
                     showToast('Bild hochgeladen (' + w + '×' + h + 'px)');
                 } else {
@@ -711,20 +1079,6 @@ function editorUpload() {
                 btn.textContent = 'Hochladen';
                 showToast('Upload fehlgeschlagen', 'error');
             });
-    });
-}
-
-function deleteProductImage(productId, imageUrl, btn) {
-    if (!confirm('Bild wirklich entfernen?')) return;
-    fetch('/api.php?action=delete_product_image', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ product_id: productId, image_url: imageUrl })
-    }).then(r => r.json()).then(data => {
-        if (data.success) {
-            btn.closest('.product-thumb-wrap').remove();
-            showToast('Bild entfernt');
-        }
     });
 }
 </script>

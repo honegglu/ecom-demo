@@ -78,12 +78,22 @@ switch ($action) {
             $found = false;
             foreach ($products as &$p) {
                 if ($p['id'] === (int)$input['id']) {
-                    if (isset($input['name'])) $p['name'] = $input['name'];
+                    if (isset($input['name'])) {
+                        $p['name'] = $input['name'];
+                        $p['slug'] = preg_replace('/[^a-z0-9]+/', '-', strtolower(trim($input['name'])));
+                        $p['slug'] = trim($p['slug'], '-');
+                    }
+                    if (isset($input['sku'])) $p['sku'] = $input['sku'];
+                    if (isset($input['category'])) $p['category'] = $input['category'];
                     if (isset($input['regular_price'])) $p['regular_price'] = (float)$input['regular_price'];
-                    if (isset($input['sale_price'])) $p['sale_price'] = $input['sale_price'] === '' ? null : (float)$input['sale_price'];
+                    if (isset($input['sale_price'])) $p['sale_price'] = $input['sale_price'] === '' || $input['sale_price'] === null ? null : (float)$input['sale_price'];
                     if (isset($input['stock_qty'])) $p['stock_qty'] = (int)$input['stock_qty'];
                     if (isset($input['in_stock'])) $p['in_stock'] = (bool)$input['in_stock'];
                     if (isset($input['short_description'])) $p['short_description'] = $input['short_description'];
+                    if (isset($input['description'])) $p['description'] = $input['description'];
+                    if (isset($input['featured'])) $p['featured'] = (bool)$input['featured'];
+                    if (isset($input['type'])) $p['type'] = $input['type'];
+                    if (isset($input['attributes'])) $p['attributes'] = $input['attributes'];
                     if (isset($input['variations'])) $p['variations'] = $input['variations'];
                     $found = true;
                     break;
@@ -98,6 +108,58 @@ switch ($action) {
             }
         } else {
             echo json_encode(['success' => false, 'error' => 'Invalid input']);
+        }
+        break;
+
+    case 'create_product':
+        $input = json_decode(file_get_contents('php://input'), true);
+        if ($input && isset($input['name'])) {
+            $products = get_products();
+            $maxId = 0;
+            foreach ($products as $p) {
+                if ($p['id'] > $maxId) $maxId = $p['id'];
+            }
+            $slug = preg_replace('/[^a-z0-9]+/', '-', strtolower(trim($input['name'])));
+            $slug = trim($slug, '-');
+            $newProduct = [
+                'id' => $maxId + 1,
+                'sku' => $input['sku'] ?? ('prod-' . ($maxId + 1)),
+                'name' => $input['name'],
+                'slug' => $slug,
+                'type' => $input['type'] ?? 'simple',
+                'short_description' => $input['short_description'] ?? '',
+                'description' => $input['description'] ?? '',
+                'regular_price' => (float)($input['regular_price'] ?? 0),
+                'sale_price' => isset($input['sale_price']) && $input['sale_price'] !== '' ? (float)$input['sale_price'] : null,
+                'category' => $input['category'] ?? '',
+                'in_stock' => true,
+                'stock_qty' => (int)($input['stock_qty'] ?? 0),
+                'images' => [],
+                'attributes' => $input['attributes'] ?? [],
+                'variations' => $input['variations'] ?? [],
+                'featured' => (bool)($input['featured'] ?? false),
+            ];
+            $products[] = $newProduct;
+            save_products($products);
+            echo json_encode(['success' => true, 'product' => $newProduct]);
+        } else {
+            echo json_encode(['success' => false, 'error' => 'Name ist erforderlich']);
+        }
+        break;
+
+    case 'delete_product':
+        $input = json_decode(file_get_contents('php://input'), true);
+        if ($input && isset($input['id'])) {
+            $products = get_products();
+            $filtered = array_filter($products, fn($p) => $p['id'] !== (int)$input['id']);
+            if (count($filtered) < count($products)) {
+                save_products(array_values($filtered));
+                echo json_encode(['success' => true]);
+            } else {
+                echo json_encode(['success' => false, 'error' => 'Produkt nicht gefunden']);
+            }
+        } else {
+            echo json_encode(['success' => false, 'error' => 'Ungültige Eingabe']);
         }
         break;
 

@@ -106,8 +106,8 @@ usort($allProducts, function($a, $b) use ($currentSort) {
                             <?php if ($hasVariations && $priceRange['min'] !== $priceRange['max']): ?>
                                 <span class="price">ab <?= format_price($priceRange['min'], $settings) ?></span>
                             <?php elseif ($isOnSale): ?>
-                                <span class="price-old"><?= format_price($product['regular_price'], $settings) ?></span>
-                                <span class="price price-sale"><?= format_price($product['sale_price'], $settings) ?></span>
+    <span class="price"><?= format_price($product['regular_price'], $settings) ?></span>
+    <span class="price-savings">8% Rabatt</span>
                             <?php else: ?>
                                 <span class="price"><?= format_price($effectivePrice, $settings) ?></span>
                             <?php endif; ?>

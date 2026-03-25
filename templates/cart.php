@@ -84,12 +84,7 @@ function renderCartPage() {
                 ${attrText ? `<span class="cart-item-attrs">${escapeHtml(attrText)}</span>` : ''}
                 <span class="cart-item-price-mobile">${formatPrice(item.price)}</span>
             </div>
-            <div class="cart-item-qty">
-                <button class="qty-btn" onclick="updateCartQty(${i}, -1)">−</button>
-                <input type="number" value="${item.qty}" min="1" max="99" class="qty-input"
-                       onchange="setCartQty(${i}, this.value)">
-                <button class="qty-btn" onclick="updateCartQty(${i}, 1)">+</button>
-            </div>
+    <span style="font-weight:500">${item.qty}x</span>
             <div class="cart-item-price">${formatPrice(item.price * item.qty)}</div>
             <button class="cart-item-remove" onclick="removeCartItem(${i})" aria-label="Entfernen">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>

@@ -58,9 +58,8 @@ $colorHexMap = [
             <?php if ($hasVariations && $priceRange['min'] !== $priceRange['max']): ?>
                 <span class="price-current" id="currentPrice">ab <?= format_price($priceRange['min'], $settings) ?></span>
             <?php elseif ($product['sale_price'] !== null): ?>
-                <span class="price-old-detail"><?= format_price($product['regular_price'], $settings) ?></span>
-                <span class="price-current price-sale"><?= format_price($product['sale_price'], $settings) ?></span>
-                <span class="price-savings">Du sparst <?= format_price($product['regular_price'] - $product['sale_price'], $settings) ?></span>
+               <span class="price-current"><?= format_price($product['regular_price'], $settings) ?></span>
+               <span class="price-savings">8% Rabatt</span>
             <?php else: ?>
                 <span class="price-current"><?= format_price($effectivePrice, $settings) ?></span>
             <?php endif; ?>
@@ -115,11 +114,7 @@ $colorHexMap = [
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
                         Nur noch <?= $product['stock_qty'] ?> Stück verfügbar
                     </span>
-                <?php else: ?>
-                    <span class="stock-ok">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                        Auf Lager
-                    </span>
+                
                 <?php endif; ?>
             <?php else: ?>
                 <span class="stock-out">Nicht verfügbar</span>
@@ -129,9 +124,9 @@ $colorHexMap = [
         <!-- Quantity & Add to cart -->
         <div class="add-to-cart-section">
             <div class="quantity-selector">
-                <button class="qty-btn" onclick="changeQty(-1)" aria-label="Menge verringern">−</button>
+                
                 <input type="number" id="qtyInput" value="1" min="1" max="99" class="qty-input">
-                <button class="qty-btn" onclick="changeQty(1)" aria-label="Menge erhöhen">+</button>
+                
             </div>
             <button class="btn btn-primary btn-add-cart" id="addToCartBtn"
                     onclick="addToCart()"

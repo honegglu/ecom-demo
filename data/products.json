@@ -5,20 +5,18 @@
     "name": "V-Neck T-Shirt",
     "slug": "v-neck-t-shirt",
     "type": "variable",
-    "short_description": "Lässiges V-Neck T-Shirt aus weicher Baumwolle – perfekt für jeden Tag.",
-    "description": "Dieses klassische V-Neck T-Shirt besticht durch seinen bequemen Schnitt und das weiche Baumwollmaterial. Ideal für den Alltag oder als Basis-Layer unter einem Hoodie. Erhältlich in verschiedenen Farben und Grössen.",
+    "short_description": "Lässiges V-Neck T-Shirt aus weicher Seide – perfekt für jeden Tag.",
+    "description": "Dieses klassische V-Neck T-Shirt besticht durch seinen bequemen Schnitt und das weiche Seidenmaterial. Ideal für den Alltag oder als Basis-Layer unter einem Hoodie. Erhältlich in verschiedenen Farben und Grössen.",
     "regular_price": 20.00,
     "sale_price": null,
     "category": "T-Shirts",
     "in_stock": true,
     "stock_qty": 45,
     "images": [
-      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/vneck-tee-2.jpg",
-      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/vnech-tee-green-1.jpg",
-      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/vnech-tee-blue-1.jpg"
-    ],
+      "/assets/images/redtshirt.png" 
+  ],
     "attributes": [
-      {"name": "Farbe", "options": ["Rot", "Grün", "Blau"]},
+      {"name": "Farbe", "options": ["Rot"]},
       {"name": "Grösse", "options": ["S", "M", "L"]}
     ],
     "variations": [
@@ -100,8 +98,8 @@
     "in_stock": true,
     "stock_qty": 55,
     "images": [
-      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/tshirt-2.jpg"
-    ],
+      "/assets/images/greytshirthuman.png", "/assets/images/greytshirt.png" 
+  ],
     "attributes": [
       {"name": "Farbe", "options": ["Grau"]}
     ],
@@ -332,8 +330,8 @@
     "in_stock": true,
     "stock_qty": 28,
     "images": [
-      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/t-shirt-with-logo-1.jpg"
-    ],
+      "/assets/images/greenthuman.png", "/assets/images/greent.png" 
+  ],
     "attributes": [
       {"name": "Farbe", "options": ["Grau"]}
     ],

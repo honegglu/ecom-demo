@@ -278,40 +278,20 @@
   },
   {
     "id": 13,
-    "sku": "woo-album",
-    "name": "Album",
-    "slug": "album",
+    "sku": "woo-voucher",
+    "name": "Gutschein",
+    "slug": "gutschein-50",
     "type": "simple",
-    "short_description": "Digitales Album mit exklusiven Tracks.",
-    "description": "Dieses digitale Album enthält eine Sammlung exklusiver Tracks. Nach dem Kauf erhältst du sofortigen Zugang zum Download in hoher Audioqualität.",
-    "regular_price": 15.00,
+    "short_description": "Digitaler Gutschein im Wert von CHF 50.00.",
+    "description": "Digitaler Gutschein im Wert von CHF 50.00. Einlösbar auf alle Produkte im MODO Shop",
+    "regular_price": 50.00,
     "sale_price": null,
-    "category": "Musik",
+    "category": "Gutscheine",
     "in_stock": true,
     "stock_qty": 999,
     "images": [
-      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2022/05/album-1.jpg"
-    ],
-    "attributes": [],
-    "variations": [],
-    "featured": false
-  },
-  {
-    "id": 14,
-    "sku": "woo-single",
-    "name": "Single",
-    "slug": "single",
-    "type": "simple",
-    "short_description": "Digitale Single zum sofortigen Download.",
-    "description": "Lade diese digitale Single sofort herunter und geniesse den neuesten Hit in bester Audioqualität. Kompatibel mit allen gängigen Musikplayern.",
-    "regular_price": 3.00,
-    "sale_price": 2.00,
-    "category": "Musik",
-    "in_stock": true,
-    "stock_qty": 999,
-    "images": [
-      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/single-1.jpg"
-    ],
+      "/assets/images/voucher.png" 
+  ],
     "attributes": [],
     "variations": [],
     "featured": false

@@ -80,6 +80,7 @@ $categories = get_categories();
         <div class="container">
             <ul class="nav-list">
                 <li><a href="/" class="<?= $page === 'home' ? 'active' : '' ?>">Alle Produkte</a></li>
+                <li><a href="/?sale=1">% Sale</a></li>
                 <?php foreach ($categories as $cat): ?>
                     <li><a href="/?category=<?= urlencode($cat) ?>" class="<?= (isset($_GET['category']) && $_GET['category'] === $cat) ? 'active' : '' ?>"><?= htmlspecialchars($cat) ?></a></li>
                 <?php endforeach; ?>

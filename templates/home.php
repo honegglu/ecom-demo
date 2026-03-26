@@ -6,10 +6,14 @@ $allProducts = get_products();
 $currentCategory = $_GET['category'] ?? '';
 $currentSearch = $_GET['search'] ?? '';
 $currentSort = $_GET['sort'] ?? 'name';
+$currentSale = $_GET['sale'] ?? '';
 
 // Filter
 if ($currentCategory) {
     $allProducts = array_filter($allProducts, fn($p) => $p['category'] === $currentCategory);
+}
+if ($currentSale) {
+    $allProducts = array_filter($allProducts, fn($p) => $p['sale_price'] !== null);
 }
 if ($currentSearch) {
     $s = mb_strtolower($currentSearch);
@@ -88,9 +92,7 @@ usort($allProducts, function($a, $b) use ($currentSort) {
             <article class="product-card" data-category="<?= htmlspecialchars($product['category']) ?>">
                 <a href="/product/<?= htmlspecialchars($product['slug']) ?>" class="product-card-link">
                     <div class="product-card-image">
-                        <?php if ($isOnSale): ?>
-                            <span class="badge badge-sale">Sale</span>
-                        <?php endif; ?>
+                    
                         <?php if ($product['featured'] ?? false): ?>
                             <span class="badge badge-featured">Beliebt</span>
                         <?php endif; ?>
@@ -107,7 +109,6 @@ usort($allProducts, function($a, $b) use ($currentSort) {
                                 <span class="price">ab <?= format_price($priceRange['min'], $settings) ?></span>
                             <?php elseif ($isOnSale): ?>
     <span class="price"><?= format_price($product['regular_price'], $settings) ?></span>
-    <span class="price-savings">8% Rabatt</span>
                             <?php else: ?>
                                 <span class="price"><?= format_price($effectivePrice, $settings) ?></span>
                             <?php endif; ?>

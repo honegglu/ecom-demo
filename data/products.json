@@ -78,8 +78,8 @@
     "in_stock": true,
     "stock_qty": 22,
     "images": [
-      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/hoodie-with-logo-2.jpg"
-    ],
+      "/assets/images/hoodielogohuman.png", "/assets/images/hoodielogo.png" 
+  ],
     "attributes": [
       {"name": "Farbe", "options": ["Blau"]}
     ],
@@ -186,8 +186,8 @@
     "in_stock": true,
     "stock_qty": 18,
     "images": [
-      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/sunglasses-2.jpg"
-    ],
+      "/assets/images/sunhuman.png", "/assets/images/sun.png"
+  ],
     "attributes": [],
     "variations": [],
     "featured": true
@@ -206,7 +206,7 @@
     "in_stock": true,
     "stock_qty": 12,
     "images": [
-      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/hoodie-with-pocket-2.jpg"
+      "/assets/images/greyhoodiehuman.png", "/assets/images/greyhoodie.png" 
     ],
     "attributes": [
       {"name": "Farbe", "options": ["Grau"]}
@@ -228,8 +228,8 @@
     "in_stock": true,
     "stock_qty": 25,
     "images": [
-      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/hoodie-with-zipper-2.jpg"
-    ],
+      "/assets/images/ziphoodiehuman.png", "/assets/images/ziphoodie.png" 
+  ],
     "attributes": [],
     "variations": [],
     "featured": true
@@ -248,8 +248,8 @@
     "in_stock": true,
     "stock_qty": 33,
     "images": [
-      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/long-sleeve-tee-2.jpg"
-    ],
+      "/assets/images/longgreenhuman.png", "/assets/images/longgreen.png" 
+  ],
     "attributes": [
       {"name": "Farbe", "options": ["Grün"]}
     ],
@@ -270,8 +270,8 @@
     "in_stock": true,
     "stock_qty": 40,
     "images": [
-      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/polo-2.jpg"
-    ],
+      "/assets/images/polohuman.png", "/assets/images/polo.png" 
+  ],
     "attributes": [
       {"name": "Farbe", "options": ["Blau"]}
     ],

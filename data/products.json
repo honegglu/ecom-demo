@@ -48,11 +48,8 @@
     "in_stock": true,
     "stock_qty": 38,
     "images": [
-      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/hoodie-2.jpg",
-      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/hoodie-blue-1.jpg",
-      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/hoodie-green-1.jpg",
-      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/hoodie-with-logo-2.jpg"
-    ],
+      "/assets/images/hoodiehuman.png", "/assets/images/hoodiegreen.png", "/assets/images/hoodieblau.png", "/assets/images/hoodiered.png" 
+  ],
     "attributes": [
       {"name": "Farbe", "options": ["Rot", "Grün", "Blau"]},
       {"name": "Logo", "options": ["Ja", "Nein"]}
@@ -125,8 +122,8 @@
     "in_stock": true,
     "stock_qty": 30,
     "images": [
-      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/beanie-2.jpg"
-    ],
+      "/assets/images/beanie-rosa-human.jpeg", "/assets/images/beanie rosa.png"
+  ],
     "attributes": [
       {"name": "Farbe", "options": ["Rot"]}
     ],
@@ -147,8 +144,8 @@
     "in_stock": true,
     "stock_qty": 15,
     "images": [
-      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/belt-2.jpg"
-    ],
+      "/assets/images/belt.png", "/assets/images/belthuman.png"
+  ],
     "attributes": [],
     "variations": [],
     "featured": false
@@ -167,8 +164,8 @@
     "in_stock": true,
     "stock_qty": 42,
     "images": [
-      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/cap-2.jpg"
-    ],
+      "/assets/images/capyellowhuman.png", "/assets/images/cap yellow.png"
+  ],
     "attributes": [
       {"name": "Farbe", "options": ["Gelb"]}
     ],
@@ -357,8 +354,8 @@
     "in_stock": true,
     "stock_qty": 35,
     "images": [
-      "https://woocommercecore.mystagingwebsite.com/wp-content/uploads/2017/12/beanie-with-logo-1.jpg"
-    ],
+      "/assets/images/beanielogo-blau-human.png", "/assets/images/beanielogo blau.png"
+  ],
     "attributes": [
       {"name": "Farbe", "options": ["Rot"]}
     ],

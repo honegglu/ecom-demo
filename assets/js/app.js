@@ -181,11 +181,10 @@ document.addEventListener('DOMContentLoaded', () => {
             animation: badgePulse .4s ease;
         }
         @keyframes badgePulse {
-            0% { transform: translate(4px, -4px) scale(1); }
-            50% { transform: translate(4px, -4px) scale(1.4); }
-            100% { transform: translate(4px, -4px) scale(1); }
+            0% { transform: scale(1); }
+            50% { transform: scale(1.4); }
+            100% { transform: scale(1); }
         }
-        .cart-count { display: none; }
     `;
     document.head.appendChild(style);
 })();

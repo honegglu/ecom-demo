@@ -69,7 +69,10 @@ $categories = get_categories();
                 <div class="header-actions">
                     <!-- USABILITY-HOOK: Warenkorb-Icon -->
                     <a href="/cart" class="cart-link" aria-label="Warenkorb">
-                        <svg width="28" height="28" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="14" width="28" height="22" rx="2"/><path d="M13 14V10a7 7 0 0 1 14 0v4"/></svg>
+                        <svg width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="7" y="15" width="26" height="20" rx="2" stroke="#00008F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M14 15V11a6 6 0 0 1 12 0v4" stroke="#00008F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
                         <span id="cartCount" class="cart-count">0</span>
                     </a>
                 </div>

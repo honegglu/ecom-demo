@@ -73,7 +73,7 @@ $categories = get_categories();
                             <rect x="7" y="15" width="26" height="20" rx="2" stroke="#00008F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                             <path d="M14 15V11a6 6 0 0 1 12 0v4" stroke="#00008F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
-                        <span id="cartCount" class="cart-count">0</span>
+                        <span id="cartCount" class="cart-count" style="display:none">0</span>
                     </a>
                 </div>
             </div>

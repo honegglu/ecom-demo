@@ -137,19 +137,21 @@ input, select, textarea { font-family: inherit; font-size: inherit; }
 
 .cart-count {
     position: absolute;
-    top: 0;
-    right: 0;
-    background: var(--color-secondary);
+    bottom: 2px;
+    right: -8px;
+    background: #d75d3d;
     color: #fff;
-    font-size: .7rem;
+    font-family: 'Source Sans Pro', 'Source Sans 3', var(--font-family), sans-serif;
+    font-size: 14px;
     font-weight: 600;
-    min-width: 18px;
-    height: 18px;
-    border-radius: 9px;
+    min-width: 22px;
+    height: 22px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    transform: translate(4px, -4px);
+    line-height: 1;
+    letter-spacing: 0.02em;
 }
 
 .mobile-menu-toggle {
